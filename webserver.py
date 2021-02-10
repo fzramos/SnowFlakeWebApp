@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, url_for
+from config import Config
 from snowflake import connector
 import pandas as pd
 
-app = Flask("my website")
+app = Flask(__name__)
+app.config.from_object(Config)
 
 @app.route('/')
 def homepage():
@@ -16,15 +18,20 @@ def submitpage():
 def thanks4submit():
     colorname = request.form.get('cname')
     username = request.form.get('uname')
+    cur.execute('INSERT INTO COLORS(COLOR_UID, COLOR_NAME) '
+                + 'SELECT COLOR_UID_SEQ.nextval, ' + "'" + colorname
+                + "';")
     return render_template('thanks4submit.html'
                         , colorname=colorname
                         , username=username)
+# print(app.config['SNOWFLAKE_ACCOUNT'])
+print(app.config.get("SNOWFLAKE_ACCOUNT"))
 
 # Snowflake
 cnx = connector.connect(
-    account='BLANK',
-    user='BLANK',
-    password='BLANK',
+    account=app.config['SNOWFLAKE_ACCOUNT'],
+    user=app.config['SNOWFLAKE_USER'],
+    password=app.config['SNOWFLAKE_PASSWORD'],
     warehouse='COMPUTE_WH',
     database='DEMO_DB',
     schema='PUBLIC'
