@@ -8,6 +8,10 @@ app.config.from_object(Config)
 
 @app.route('/')
 def homepage():
+    cur.execute('SELECT * FROM COLORS')
+    rows = pd.DataFrame(cur.fetchall(), columns=['Color UID', 'Color Name'])
+
+    dfhtml = rows.to_html()
     return render_template('index.html', colors_table = dfhtml)
 
 @app.route('/submit')
@@ -24,8 +28,6 @@ def thanks4submit():
     return render_template('thanks4submit.html'
                         , colorname=colorname
                         , username=username)
-# print(app.config['SNOWFLAKE_ACCOUNT'])
-print(app.config.get("SNOWFLAKE_ACCOUNT"))
 
 # Snowflake
 cnx = connector.connect(
@@ -37,10 +39,10 @@ cnx = connector.connect(
     schema='PUBLIC'
 )
 cur = cnx.cursor()
-cur.execute('SELECT * FROM COLORS')
-rows=pd.DataFrame(cur.fetchall(),columns=['Color UID', 'Color Name'])
-
-# dataframe as html, built-in method for pandas dataframe
-dfhtml = rows.to_html()
+# cur.execute('SELECT * FROM COLORS')
+# rows=pd.DataFrame(cur.fetchall(),columns=['Color UID', 'Color Name'])
+#
+# # dataframe as html, built-in method for pandas dataframe
+# dfhtml = rows.to_html()
 
 app.run()
