@@ -42,9 +42,8 @@ def coolcharts():
                 + 'GROUP BY COLOR_NAME '\
                 + 'ORDER BY COUNT(*) DESC; ')
     data4Charts = pd.DataFrame(cur.fetchall(), columns=['color', 'votes'])
-    data4Charts.to_csv('data4charts.csv', index=False)
-    data4ChartsJSON = data4Charts.to_json('data4ChartsJSON.json', orient='records')
-    return render_template('coolcharts.html')
+    data4ChartsJSON = data4Charts.to_json(orient='records')
+    return render_template('coolcharts.html', data4ChartsJSON=data4ChartsJSON)
 
 # Snowflake
 cnx = connector.connect(

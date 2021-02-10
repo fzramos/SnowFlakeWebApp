@@ -25,12 +25,13 @@
       var vlSpec = {
         "$schema": "https://vega.github.io/schema/vega-lite/v4.json",
         "data": {
-          "values":  [{"color":"Indigo","votes":94},{"color":"Red","votes":69},{"color":"Yellow","votes":60},{"color":"Aquamarine","votes":59},{"color":"Violet","votes":58},{"color":"Orange","votes":55},{"color":"Fuchsia","votes":54},{"color":"Olive","votes":53},{"color":"Blue","votes":52},{"color":"Teal","votes":51},{"color":"Pink","votes":51},{"color":"Plum","votes":51},{"color":"Green","votes":50},{"color":"Khaki","votes":50},{"color":"Coral","votes":49},{"color":"Goldenrod","votes":48},{"color":"Turquoise","votes":46},{"color":"Maroon","votes":45},{"color":"Honeydew","votes":1},{"color":"Beige","votes":1},{"color":"Ebony","votes":1},{"color":"Mint Green","votes":1},{"color":"Sienna","votes":1},{"color":"Gold","votes":1},{"color":"Navy","votes":1}]
+          "values":  {{ data4ChartsJSON | safe }}
         },
-        "mark": "point",
+        "mark": "bar",
         "encoding": {
           "x": {"field":"votes", "type": "quantitative"},
-          "y": {"field":"color", "type": "nominal"}
+          "y": {"field":"color", "type": "nominal"},
+          "color": {"field": "color", "type": "nominal", "scale": null}
         }
       };
 
