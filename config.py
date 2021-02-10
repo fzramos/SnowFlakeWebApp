@@ -10,4 +10,4 @@ class Config(object):
     SNOWFLAKE_PASSWORD = os.environ.get('SNOWFLAKE_PASSWORD')
 
 # print(os.environ)
-SNOWFLAKE_ACCOUNT = os.environ.get('SNOWFLAKE_ACCOUNT')
+# SNOWFLAKE_ACCOUNT = os.environ.get('SNOWFLAKE_ACCOUNT')

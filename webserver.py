@@ -1,17 +1,22 @@
+# Import packages
 from flask import Flask, render_template, request, url_for
 from config import Config
 from snowflake import connector
 import pandas as pd
 
+# Flask Web Application
 app = Flask(__name__)
 app.config.from_object(Config)
 
 @app.route('/')
 def homepage():
-    cur.execute('SELECT * FROM COLORS')
-    rows = pd.DataFrame(cur.fetchall(), columns=['Color UID', 'Color Name'])
-
-    dfhtml = rows.to_html()
+    cur.execute('SELECT COLOR_NAME, COUNT(*) '\
+                + 'FROM COLORS '\
+                + 'GROUP BY COLOR_NAME '\
+                + 'ORDER BY COUNT(*) DESC; ')
+    rows = pd.DataFrame(cur.fetchall(), columns=['Color Name', 'Votes'])
+    # dataframe as html, built-in method for pandas dataframe
+    dfhtml = rows.to_html(index=False)
     return render_template('index.html', colors_table = dfhtml)
 
 @app.route('/submit')
@@ -38,11 +43,10 @@ cnx = connector.connect(
     database='DEMO_DB',
     schema='PUBLIC'
 )
+# or could use snowflakeConnection.py
+# from snowflakeConnection import sfconnect
+# cnx = sfconnect()
+
 cur = cnx.cursor()
-# cur.execute('SELECT * FROM COLORS')
-# rows=pd.DataFrame(cur.fetchall(),columns=['Color UID', 'Color Name'])
-#
-# # dataframe as html, built-in method for pandas dataframe
-# dfhtml = rows.to_html()
 
 app.run()
