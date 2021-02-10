@@ -34,6 +34,15 @@ def thanks4submit():
                         , colorname=colorname
                         , username=username)
 
+@app.route('/coolcharts')
+def coolcharts():
+    cur.execute('SELECT COLOR_NAME, COUNT(*) '\
+                + 'FROM COLORS '\
+                + 'GROUP BY COLOR_NAME '\
+                + 'ORDER BY COUNT(*) DESC; ')
+    data4Charts = pd.DataFrame(cur.fetchall(), columns=['color', 'votes'])
+    data4Charts.to_csv('data4charts.csv', index=False)
+    return render_template('coolcharts.html')
 # Snowflake
 cnx = connector.connect(
     account=app.config['SNOWFLAKE_ACCOUNT'],
